@@ -7,9 +7,11 @@ Created on Tue Oct 13 16:25:35 2020
 """
 
 """
-Created on Mon Oct 19 12:32:59 2020
+Credit to:
 
 @author: kerry h.
+
+for continuous colour cmaps for use with matplotlib (Lines 22-62).
 """
 
 
@@ -62,9 +64,7 @@ def get_continuous_cmap(hex_list, float_list=None):
 #Colour blind palette
 okabe_tio = ["#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"]
 
-#Colour maps for different drivers
-#misc_hex_list=['#e0f2f1', '#b2dfdb', '#80cbc4', '#4db6ac', '#26a69a', '#009688',
-#              '#00897b', '#00796b', '#00695c', '#004d40']
+#Colour maps to colour by different driver mutation types
 misc_hex_list=['#F6FFFF','#D3FFFD', '#9ED4D1', '#7BB7B4', '#579491', '#386E6C']
 misc_cmap=get_continuous_cmap(misc_hex_list)
 
@@ -76,8 +76,6 @@ anc_hex_list=['#f9fbe7', '#f0f4c3', '#e6ee9c', '#dce775', '#d4e157', '#cddc39', 
               '#afb42b', '#9e9d24', '#827717']
 anc_cmap=get_continuous_cmap(anc_hex_list)
 
-#HGT_hex_list=['#F5EEF8','#F5EEF8','#F5EEF8','#C39BD3','#AF7AC5', '#9B59B6',
-#          '#884EA0', '#76448A', '#633974', '#512E5F']
 HGT_hex_list=['#FBF6FF','#E7D3FF', '#B69ED4', '#967BB7', '#725794', '#51386E']
 
 HGT_cmap=get_continuous_cmap(HGT_hex_list)
@@ -89,41 +87,26 @@ polar_cmap=get_continuous_cmap(polar_hex_list)
 import pandas as pd
 import matplotlib.gridspec as gridspec
 
-
-# create sample data as shown in the OP
-
-"""
-npop='MCE3_partHGT_Ab-_4+_SC_blocks'
-inp_path='/Users/lwoo0005/Documents/An_H_pylori/Shami_stuff/partHGT_MCE3_sig_Ab-_minD0_0_selcoef_blocker_more_info.xlsx'
-sheet='partHGT_MCE3_sig_Ab-_minD0_0_se'
-op_path='/Users/lwoo0005/Documents/An_H_pylori/Shami_stuff/'
-"""
-
 npop='MCE3_partAb-_sig_rm1tp'
 inp_path='/Users/lwoo0005/Documents/An_H_pylori/Shami_stuff/partMCE3_allvars_selection_coefs.xlsx'
 sheet='MCE3_partAb-_allvars_rm1tp_bloc'
 op_path='/Users/lwoo0005/Documents/An_H_pylori/Shami_stuff/'
 
-
-"""
-npop='428F1_Clr_4+_SC_blocks'
-inp_path='/Users/lwoo0005/Documents/An_H_pylori/Clr_Crtl_Fitness_assay/428F1_Clr_sig_minD0_0_selcoef_blocker.xlsx'
-sheet='428F1_Clr_sig_minD0_0_selcoef_b'
-op_path='/Users/lwoo0005/Documents/An_H_pylori/Clr_Crtl_Fitness_assay/'
-"""
 data=pd.read_excel(open(inp_path,'rb'), sheet_name=sheet)
 data=data.sort_values('Block')
 
 # Only including blocks greater than a codon length
 
 data = data.drop(data[data.Block_length < 4].index)
+
+#Length of H. pylori P12 genome
 genome_length=1673813
 
 HGT_freq_list=data["Frequency_HGT"].tolist()
 
 a = data['Average_SC'].to_numpy()
-#scale_min=a.min()
-#scale_max=a.max()
+
+#Input minimum and maximum values that correlate to spread of selection coefficients
 scale_min=-0.3
 scale_max=0.3
 sc_list_scaled=np.interp(a, (scale_min, scale_max), (0, 1))
@@ -147,6 +130,7 @@ for p,w,t,s,h in zip(positions,widths,type_list, sc_list_scaled, HGT_freq_list):
     x=p
     y = 0
     """
+    #For colouring by driver type option.
     if t=='HGT':
         c=HGT_cmap(0.5)
         #c=my_cmap(s)
@@ -160,6 +144,7 @@ for p,w,t,s,h in zip(positions,widths,type_list, sc_list_scaled, HGT_freq_list):
         #c=cm.Purples(s)
         c=misc_cmap(0.5)
     """
+    #For colouring by average selection coefficient of block
     c=cm.coolwarm(s)
     new_rec=plt.Rectangle((x, y),width=w,height=h*100000,color=c)
     ax.add_artist(new_rec)
@@ -184,6 +169,7 @@ ax.spines["bottom"].set_color("#66FFCB")
 ax.spines["bottom"].set_linewidth(4)
 
 """
+# For colouring by driver mutation type
 #ax0.bar(x=positions, height=HGT_freq_list, width=widths, color='silver')
 ax0.spines['top'].set_visible(False)
 ax0.spines['right'].set_visible(False)

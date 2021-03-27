@@ -6,14 +6,7 @@ Created on Tue Sep  1 23:49:40 2020
 @author: lwoo0005
 """
 
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jul 27 13:55:01 2020
-
-@author: lwoo0005
-"""
-
+#Note--running in Python 3
 #Script must be run through conda environment with pysam installed
 #(interferes with breseq)
 #use conda activate pysam_env
@@ -58,19 +51,7 @@ for pop in [
     #mauve_gaps='/Users/lwoo0005/ab_mauve_maxHGTs/Mauve_P12_ShamiFA_MCE3T0_maxHGT_gaps'
     #Open the BAM file
     mauve_SNPs='/Users/lwoo0005/Documents/An_H_pylori/mauve_snps_n_gaps/Mauve_P12_v_maxHGTs/Mauve_P12_428_rdxA_from_MCH1_SNPs'
-    #mauve_SNPs = '/Users/lwoo0005/Documents/An_H_pylori/mauve_snps_n_gaps/Mauve_P12_'+pop_in_fasta+'_misc_SNPs'
-    #mauve_SNPs='/Users/lwoo0005/Documents/An_H_pylori/Mauve_P12_v_maxHGTs/Mauve_P12_426F4_maxHGT_genome_SNPs'
     mauve_gaps='/Users/lwoo0005/Documents/An_H_pylori/mauve_snps_n_gaps/Mauve_P12_v_maxHGTs/Mauve_P12_428_frxA_rdxA_HGT_genome_gaps'
-    #bam_file='/Users/lwoo0005/Documents/An_H_pylori/evolved_strains/'+pop+'_vs_P12_w_HPP12_w_'+pop+'_maxHGT_genome_breseq_p0_bam_info/'+pop+'_vs_P12_w_HPP12_w_'+pop+'_maxHGT_genome_breseq_p0_alignment.bam'
-    #bam_file='/Users/lwoo0005/Documents/An_H_pylori/Shami_stuff/bam_data/'+pop+'_L8_breseq_v_P12_w_HPP12_w_'+pop_in_fasta+'_maxHGT_genome_p0_bam_info/reference.bam'
-    #fasta_file='/Users/lwoo0005/Documents/An_H_pylori/evolved_strains/'+pop+'_vs_P12_w_HPP12_w_'+pop+'_maxHGT_genome_breseq_p0_bam_info/'+pop+'_vs_P12_w_HPP12_w_'+pop+'_maxHGT_genome_breseq_p0_ref.fasta'
-    #fasta_file='/Users/lwoo0005/Documents/An_H_pylori/Shami_stuff/bam_data/'+pop+'_L8_breseq_v_P12_w_HPP12_w_'+pop_in_fasta+'_maxHGT_genome_p0_bam_info/reference.fasta'
-    #bam_file= '/Users/lwoo0005/Documents/Laura_stuff/H_py_An/Concatanated_maxHGT_p12_genomes/bam_data/'+pop+'_vs_P12_w_HPP12_w_'+pop+'_maxHGT_genome_breseq_p0_bam_info/'+pop+'_vs_P12_w_HPP12_w_'+pop+'_maxHGT_genome_breseq_p0_alignment.bam'
-    #bam_file='/Users/lwoo0005/Documents/An_H_pylori/Clr_Crtl_Fitness_assay/v_maxHGT_bam_data/'+pop+'T'+t+'_v_'+pop+'_maxHGT_genome_w_P12_w_HPP12_bam_info/reference.bam'
-    #bam_data = pysam.AlignmentFile(bam_file, "rb")
-    #Pathway to the reference file associated with the bam file
-    #fasta_file='/Users/lwoo0005/Documents/Laura_stuff/H_py_An/Concatanated_maxHGT_p12_genomes/bam_data/'+pop+'_vs_P12_w_HPP12_w_'+pop+'_maxHGT_genome_breseq_p0_bam_info/'+pop+'_vs_P12_w_HPP12_w_'+pop+'_maxHGT_genome_breseq_p0_ref.fasta'
-    #fasta_file='/Users/lwoo0005/Documents/An_H_pylori/Clr_Crtl_Fitness_assay/v_maxHGT_bam_data/'+pop+'T'+t+'_v_'+pop+'_maxHGT_genome_w_P12_w_HPP12_bam_info/reference.fasta'
     bam_file='/Users/lwoo0005/Documents/An_H_pylori/rdxA_frxA_HGT_search/no_Mtz_428_frxA_rdxA_HGT_search_bam_data/'+pop+'_vs_P12_w_HPP12_'+pop_in_fasta+'_maxHGT_genome_breseq_p0_bam_info/'+pop+'_vs_P12_w_HPP12_'+pop_in_fasta+'_maxHGT_genome_breseq_p0_alignment.bam'
     fasta_file='/Users/lwoo0005/Documents/An_H_pylori/rdxA_frxA_HGT_search/no_Mtz_428_frxA_rdxA_HGT_search_bam_data/'+pop+'_vs_P12_w_HPP12_'+pop_in_fasta+'_maxHGT_genome_breseq_p0_bam_info/'+pop+'_vs_P12_w_HPP12_'+pop_in_fasta+'_maxHGT_genome_breseq_p0_ref.fasta'
     
@@ -317,7 +298,7 @@ for pop in [
     
     #SNP 535
 #Use this for normal ref+HGT consideration; use the other for just HGT bin 
-# (inlcuding refer only for reference coverage)
+# (including refer only for reference coverage)
     """   
     for refer, HGT in zip(sam_cov_a, sam_cov_b):
         refer_cov.append(int(refer[0])+int(HGT[1]))

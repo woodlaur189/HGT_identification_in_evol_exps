@@ -6,20 +6,13 @@ Created on Thu Feb  6 14:50:10 2020
 @author: lwoo0005
 """
 
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jan 29 16:22:28 2020
-
-@author: lwoo0005
-"""
-
+#Cutting out the donor sequences based on the coverage regions.
 from Bio import SeqIO
 
 op_path='/Users/lwoo0005/Documents/Laura_stuff/H_py_An/'
 fasta_file = '/Users/lwoo0005/Documents/Laura_stuff/H_py_An/426A3_max_HGT_consensus_genome.fasta'
 
-#to be extracted from file name
+#Should be extracted from file name in later updates
 pop='426A3'
 seq_record = SeqIO.read(fasta_file, "fasta")
 

@@ -4,7 +4,7 @@
 Created on Tue Feb  9 16:04:30 2021
 
 """
-
+# KDE scripts by:
 # Authors: Jake Vanderplas <jakevdp@cs.washington.edu>
 #          Mehreen Saeed https://stackabuse.com/author/mehreen/
 #
@@ -19,21 +19,14 @@ from sklearn.model_selection import GridSearchCV
 
 import pandas
 import openpyxl
-#Open data file
-"""
-sel_coefs_file='/Users/lwoo0005/Documents/An_H_pylori/All_MCE3_minD0_selcoefs_combined.xlsx'
-sheet1='MCE3_sig_Ab-_minD0_selcoefs'
-sheet2='partHGT_MCE3_sig_Ab-_selcoefs'
-
-X_full=(pandas.read_excel(sel_coefs_file, sheet_name=sheet1, header = 0, names=['Coefficient'],usecols=[7])).dropna()
-X_partial=(pandas.read_excel(sel_coefs_file, sheet_name=sheet2, header = 0, names=['Coefficient'],usecols=[7])).dropna()
-"""
+#Open data file(s)
 sel_coefs_file_1='/Users/lwoo0005/Documents/An_H_pylori/Shami_stuff/MCE3_allvars_rm1tp_selcoefs_and_blocks.xlsx'
 sel_coefs_file_2='/Users/lwoo0005/Documents/An_H_pylori/Shami_stuff/partMCE3_allvars_selection_coefs.xlsx'
 
 sheet1='MCE3_allvars_Ab-_rm1tp_blocks'
 sheet2='MCE3_partAb-_allvars_rm1tp_bloc'
 
+#Get average selection coefficients for blocks
 X_full=(pandas.read_excel(sel_coefs_file_1, sheet_name=sheet1, header = 0, names=['Average_SC'],usecols=[8])).dropna()
 X_partial=(pandas.read_excel(sel_coefs_file_2, sheet_name=sheet2, header = 0, names=['Average_SC'],usecols=[8])).dropna()
 
@@ -45,6 +38,7 @@ def my_scores(estimator, X):
     # Return the mean values
     return np.mean(scores)
 
+#Minimum bandwidth of 0.05
 h_vals=np.arange(0.05, 0.11, .01)
 kernels= ['gaussian', 'linear', 'tophat']
 X_plot = np.linspace(-1, 1, 5000)[:, np.newaxis]
@@ -53,6 +47,7 @@ grid = GridSearchCV(KernelDensity(),
                     {'bandwidth': h_vals, 'kernel': kernels},
                     scoring=my_scores
                     )
+#Pick the best KDE parameters for data
 log_dens_list=[]
 best_kdes=[]
 for X in [X_partial, X_full]:
@@ -62,6 +57,7 @@ for X in [X_partial, X_full]:
     log_dens = best_kde.score_samples(X_plot)
     log_dens_list.append(log_dens)
 
+#Change font to Avenir :) 
 from matplotlib import rcParams
 from matplotlib.ticker import FormatStrFormatter
 rcParams['font.family'] = 'sans-serif'
@@ -69,6 +65,7 @@ rcParams['font.sans-serif'] = ['Avenir']
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
+#Requires arithmetic notation to make only the face colour transparent
 rgbs = [(102/255,255/255,203/255,0.5),(252/255,102/255,254/255,0.5)]
 for name,n,X, log_dens, c, best_kde, r in zip(['Foundational','Expanded'],[5,3],[X_partial, X_full],log_dens_list,['#66FFCB','#FC66FE'],best_kdes, rgbs):
     ax.fill(X_plot[:,0], np.exp(log_dens),fc=r, ec=c, lw=2)

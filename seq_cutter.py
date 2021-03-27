@@ -10,9 +10,16 @@ from Bio import SeqIO
 import numpy as np
 import glob as glob
 
+#Requires as input:
+#fasta sequences for the concatenated genome (recipient + donor nodes) with mutations applied (see Deatherage and Berrick 2014, gdtools).
+#gd files should be in the same place (see below)
 singles_folder='/Users/lwoo0005/Documents/Laura_stuff/H_py_An/PHun2628p300_breseq_gd_files/*MUTSON.fasta'
+
+
+#output folder
 op_path='/Users/lwoo0005/Documents/Laura_stuff/H_py_An/'
 
+#Parse the gd_file for missing coverage start and end to get donor node regions with coverage (the spaces between)
 def seq_cutter(op_path, fasta_file, pop, donors, gd_file):
     seq_records = [seq_record for seq_record in SeqIO.parse(fasta_file, "fasta")]
     gd_list_a=[line for line in open(gd_file, 'r') if 'MC' == line.split('\t')[0]]
@@ -70,16 +77,6 @@ def seq_cutter(op_path, fasta_file, pop, donors, gd_file):
                         out_data.append('>%s_coverage_region_%i\n' % (match_name, cut_num))
                         out_data.append(str(cut)+'\n')
                         cut_lens.append(len(cut))
-                        """
-                        print 'New cut'
-                        print 'Key %s' % (key)
-                        print 'Value %s' % (value)
-                        print 'Cut_num %i' % (cut_num)
-                        print 'False_start+1 %i' % (false_start+1)
-                        print 'Start-1 %i' % (start-1)
-                        print '>%s_coverage_region_%i' % (match_name, cut_num)
-                        print cut
-                        """
             false_start=end             
         final_cut=match_seq[false_start-1:node_length-1]
         if len(final_cut) >= 1:
@@ -87,12 +84,6 @@ def seq_cutter(op_path, fasta_file, pop, donors, gd_file):
             out_data.append('>%s_coverage_region_%i\n' % (match_name, cut_num))
             out_data.append(str(final_cut)+'\n')
             cut_lens.append(len(final_cut))
-            """
-            print 'Final cut: %i' % (cut_num)
-            print 'Node length-1: %i' % (node_length-1)
-            print '>%s_coverage_region_%i' % (match_name, cut_num)
-            print final_cut
-            """
     with open(str(op_path)+'/'+str(pop)+'_donor_coverage_regions.fasta', 'w') as op_file:
         for line in out_data:
             op_file.write(str(line))
@@ -100,80 +91,6 @@ def seq_cutter(op_path, fasta_file, pop, donors, gd_file):
     print "All done!"
     if len(cut_lens) >= 1:
         print "And the longest node is %i bp long--wow!" % (max(cut_lens)) 
-
-
-
-"""      
-def seq_cutter(op_path, fasta_file, pop, donors, gd_file):
-    seq_records = [seq_record for seq_record in SeqIO.parse(fasta_file, "fasta")]
-    gd_list_a=[line for line in open(gd_file, 'r') if 'MC' == line.split('\t')[0]]
-    gd_list=[]
-    for d in donors:
-        for line in gd_list_a:
-            if d in line.split('\t')[3]:
-                gd_list.append(line.split('\t')[3])
-    uni_ids = list(np.unique([line.split('\t')[3] for line in gd_list]))
-    main=[]
-    i=0
-    for iden in uni_ids:
-        uni_id_dic={}
-        for line in gd_list:
-            if iden == line.split('\t')[3]:
-                i+=1
-                uni_id_dic.update({i:[line.split('\t')[3],line.split('\t')[4],line.split('\t')[5]]})
-        main.append(uni_id_dic)
-    out_data=[]
-    cut_lens=[]
-    for dic in main[1:]:
-        node_length=0
-        cut_num=0
-        match_seq=''
-        match_name=''
-        false_start=1
-        for key, value in sorted(dic.items()):
-            iden=value[0]
-            start=int(value[1])
-            end=int(value[2])
-            for record in seq_records:
-                if iden in record.id:
-                    node_length = len(record.seq)
-                    cut= record.seq[false_start:start-1]
-                    if len(cut) >= 1:
-                        match_seq = record.seq
-                        match_name = record.id
-                        cut_num+=1
-                        out_data.append('>%s_coverage_region_%i\n' % (match_name, cut_num))
-                        out_data.append(str(cut)+'\n')
-                        cut_lens.append(len(cut))
-                        print 'New cut'
-                        print 'Key %s' % (key)
-                        print 'Value %s' % (value)
-                        print 'Cut_num %i' % (cut_num)
-                        print 'False_start+1 %i' % (false_start+1)
-                        print 'Start-1 %i' % (start-1)
-                        print '>%s_coverage_region_%i' % (match_name, cut_num)
-                        print cut
-            false_start=end             
-        final_cut=match_seq[false_start-1:node_length-1]
-        if len(final_cut) >= 1:
-            cut_num+=1
-            out_data.append('>%s_coverage_region_%i\n' % (match_name, cut_num))
-            out_data.append(str(final_cut)+'\n')
-            cut_lens.append(len(final_cut))
-
-            print 'Final cut: %i' % (cut_num)
-            print 'Node length-1: %i' % (node_length-1)
-            print '>%s_coverage_region_%i' % (match_name, cut_num)
-            print final_cut
-
-    with open(str(op_path)+'/'+str(pop)+'_donor_coverage_regions.fasta', 'w') as op_file:
-        for line in out_data:
-            op_file.write(str(line))
-        op_file.close()
-    print "All done!"
-    if len(cut_lens) >= 1:
-        print "And the longest node is %i bp long--wow!" % (max(cut_lens)) 
-"""
 
 for g in glob.iglob(singles_folder):
     fasta_file=g
@@ -215,6 +132,7 @@ for g in glob.iglob(singles_folder):
         donors=['DMJM28']
     elif 'MCH' in pop:
         donors=['DMJM28']
+    #Controls
     elif '12' in pop:
         donors=['DMJM26','DMJM28']
     elif 'MCC4' in pop:

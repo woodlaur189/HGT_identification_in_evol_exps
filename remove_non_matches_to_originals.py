@@ -8,8 +8,7 @@ Created on Sun Mar 29 01:23:19 2020
 
 #Remove non-alignments from evolved populations
 #If the coverage region doesn't align with any of the three original strains,
-# it is considered garbage and binned
-# Will simply run the donor blasts back against 
+#it is tossed (but collected in a folder)
 
 from Bio import SeqIO
 from Bio.Blast.Applications import NcbiblastnCommandline

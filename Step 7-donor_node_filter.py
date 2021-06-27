@@ -5,6 +5,8 @@ Created on Tue Mar 24 11:07:12 2020
 
 @author: lwoo0005
 """
+#Note: currently written in Python2
+#Install the relevant dependencies if running Blast in Python
 
 from Bio import SeqIO
 from Bio.Blast.Applications import NcbiblastnCommandline
@@ -12,6 +14,7 @@ from Bio.Blast import NCBIXML
 from glob import glob
 import os, errno
 
+#For each donor scaffold, blast the scaffold against the recipient and any other donor(s) and filter for length to retrieve "pruned" donor scaffolds
 def scaf_blaster(qfile, output_path, label, db):
     op = str(output_path)+"/Scaffold_blaster/Blast_XMLs/"
     print op

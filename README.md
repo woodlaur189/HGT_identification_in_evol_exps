@@ -20,9 +20,11 @@ Include the 'ref' option to remove reads aligning to a specific contaminant.
 
 6. If a full genomic assembly for the donor is available, the donor scaffolds can be checked against it using Blast. Scaffolds may also be filtered for length to eliminate noise. Use the makeblastdb function from the BLAST+ executables () to make a database from recipient and donor(s) genomes. 
 
-7. Running the BLASTN algorithm is relatively simple but a script is given as an example (See Step 7).
+7. Running the BLASTN algorithm is relatively simple but a script using the Biopython Blast wrapper is given as an example (See Step 7).
 
 8. If a full genome is not available, the user may have to prune sequences with matches to the recipient or to contaminants. Contaminants can often be identified by their low coverage compared to scaffold length in a _de novo_ assembly, though high levels of contamination may make this more difficult.
 
-9. 
+9. Concatenate the donor scaffolds formed from the discarded donor reads and the recipient reference sequence into a single reference. Run breseq for each of the evolved samples against this new concatenated reference.
+
+10. 
 
